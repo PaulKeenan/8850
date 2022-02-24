@@ -9,18 +9,17 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
-//import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
 
 
 /**
@@ -42,8 +41,8 @@ CANSparkMax driveLeftA= new CANSparkMax(3, MotorType.kBrushed);
 CANSparkMax driveLeftB= new CANSparkMax(4, MotorType.kBrushed);
 CANSparkMax driveRightA= new CANSparkMax(1, MotorType.kBrushed);
 CANSparkMax driveRightB= new CANSparkMax(2, MotorType.kBrushed);
-CANSparkMax arm= new CANSparkMax(5, MotorType.kBrushed);
-VictorSPX intake = new VictorSPX(6);
+//CANSparkMax arm= new CANSparkMax(5, MotorType.kBrushed);
+//VictorSPX intake = new VictorSPX(6);
 //PWMTalonSRX drive = new PWMTalonSRX(7);
 
 Joystick driverController = new Joystick(0);
@@ -76,7 +75,8 @@ boolean goForAuto = false;
     SmartDashboard.putData("Auto choices", m_chooser);
 
     */
-
+    CameraServer.startAutomaticCapture();
+    
     driveLeftA.setInverted(true);
     driveLeftA.burnFlash();
     driveLeftB.setInverted(true);
@@ -86,9 +86,9 @@ boolean goForAuto = false;
     driveRightB.setInverted(false);
     driveRightB.burnFlash();
 
-    arm.setInverted(false);
-    arm.setIdleMode(IdleMode.kBrake);
-    arm.burnFlash();
+    //arm.setInverted(false);
+   // arm.setIdleMode(IdleMode.kBrake);
+    //arm.burnFlash();
 
     //add a thing on the dashboard to turn off auto if necessary
     SmartDashboard.putBoolean("Go for Auto", false);
@@ -134,7 +134,7 @@ boolean goForAuto = false;
   @Override
   public void autonomousPeriodic() {
     //arm control code. Same as in teleop
-    if(armUp) {
+    /*if(armUp) {
       if(Timer.getFPGATimestamp() - lastBurstTime < armTimeUp){
         arm.set(armTravel);
       }
@@ -149,8 +149,9 @@ boolean goForAuto = false;
       else{
         arm.set(-armHoldUp);
       }
-
-      }
+    }
+      **/
+      
     
 
       //get time since start of auto
@@ -159,10 +160,10 @@ boolean goForAuto = false;
         //series of timed events making up the flow of auto
         if (autoTimeElapsed < 3){
           //spit ball out for three seconds
-          intake.set(ControlMode.PercentOutput,-1);
+          //intake.set(ControlMode.PercentOutput,-1);
         }else if (autoTimeElapsed <6){
           //stop spitting out the ball and drive backwards slowly for three seconds
-          intake.set(ControlMode.PercentOutput, 0);
+          //intake.set(ControlMode.PercentOutput, 0);
         driveLeftA.set(-0.3);
         driveLeftB.set(-0.3);
         driveRightA.set(-0.3);
@@ -172,7 +173,7 @@ boolean goForAuto = false;
         
         }else{
           //do nothing for the rest of auto
-          intake.set(ControlMode.PercentOutput, 0);
+         // intake.set(ControlMode.PercentOutput, 0);
         driveLeftA.set(0);
         driveLeftB.set(0);
         driveRightA.set(0);
@@ -203,14 +204,14 @@ boolean goForAuto = false;
 
     //intake controls
     if(driverController.getRawButton(5)){
-      intake.set(VictorSPXControlMode.PercentOutput,1);;
+      //intake.set(VictorSPXControlMode.PercentOutput,1);;
     }
     else{
-      intake.set(VictorSPXControlMode.PercentOutput,0);
+      //intake.set(VictorSPXControlMode.PercentOutput,0);
     }
 
     //arm controls
-    if (armUp){
+    /*if (armUp){
       if(Timer.getFPGATimestamp() - lastBurstTime < armTimeUp){
         arm.set(armTravel);
       }
@@ -231,7 +232,7 @@ boolean goForAuto = false;
         lastBurstTime= Timer.getFPGATimestamp();
         armUp = false;
       }
-    
+    **/
     
 
   }
@@ -245,8 +246,8 @@ boolean goForAuto = false;
     driveLeftB.set(0);
     driveRightA.set(0);
     driveRightB.set(0);
-    arm.set(0);
-    intake.set(ControlMode.PercentOutput,0);
+    //arm.set(0);
+    //intake.set(ControlMode.PercentOutput,0);
   }
 
   /** This function is called periodically when disabled. */
